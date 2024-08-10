@@ -1,10 +1,8 @@
-FROM debian:10 AS build
-RUN apt-get update && apt-get -y install maven
+FROM maven:3.9-amazoncorretto-21 AS build
 WORKDIR /opt/shipping
-COPY pom.xml /opt/shipping/
-RUN mvn dependency:resolve
+COPY pom.xml /opt/shipping
 COPY src /opt/shipping/src/
-RUN mvn package
+RUN mvn clean package -DskipTests
 
 FROM openjdk:8-jre-alpine
 EXPOSE 8080
